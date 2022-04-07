@@ -119,7 +119,7 @@ ui <- function(){
         br(),
         
         downloadButton(outputId = "download_filtered",
-                       label = "données filtrée_fr"),
+                       label = "données filtrée"),
         
         downloadButton(outputId = "download_all_fr",
                        label = "toutes les données"),
