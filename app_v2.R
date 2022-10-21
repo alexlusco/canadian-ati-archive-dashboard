@@ -15,7 +15,7 @@ library(stringr)
 ##########################
 
 # read in data indicating whether archived on pinpoint
-archived <- read_delim("https://raw.githubusercontent.com/jdunca/cdn-ati-archive-website/main/on_pinpoint.txt", delim = "\n", col_names = FALSE) %>% rename(request_number = X1) %>% mutate(request_number = str_remove_all(request_number, ".pdf"))
+archived <- read_delim("on_pinpoint.txt", delim = "\n", col_names = FALSE) %>% rename(request_number = X1) %>% mutate(request_number = str_remove_all(request_number, ".pdf"))
 
 # read in data from LC's GitHub scraper
 ati_summaries <- read_csv("https://raw.githubusercontent.com/lchski/gc-ati-summaries-data/main/ati-summaries.csv") %>% select(-umd_number)
@@ -100,7 +100,7 @@ ui <- function(){
     
     br(),
     
-    includeHTML("https://raw.githubusercontent.com/jdunca/cdn-ati-archive-website/main/index.html"),
+    includeHTML("index.html"),
     
     br(),
     
