@@ -6,7 +6,7 @@ library(tibble)
 
 
 ### read in archive log prepped in `archive prototype`
-archived <- read_csv('../archive-prototype/ia-uploaded.csv') %>% 
+archived <- read_csv('misc/ia-uploaded.csv') %>% 
   mutate(agency = str_extract(identifier, ".+(?=_)")) %>% 
   select(identifier, title, agency, pinpoint, internet_archive) %>% 
   rename(request_number = title) %>% 
