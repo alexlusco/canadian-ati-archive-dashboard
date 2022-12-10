@@ -30,7 +30,6 @@ pinpoint <- tibble(read_delim('on_pinpoint.txt', delim = "\n", col_names = FALSE
   
 
 ### join archive log with full summary data
-
 ati_summaries.join <- ati_summaries.read %>%
   full_join(archived, by = c('request_number', 'agency')) %>%
   mutate(identifier = case_when(is.na(identifier) ~ paste(agency, request_number, sep = "_"),
@@ -72,19 +71,23 @@ ati_summaries <- ati_summaries %>%
 
 # add html code to make live link to pinpoint
 ati_summaries <- ati_summaries %>% 
-  mutate(pinpoint_url = case_when(
-    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier, "%22&p=&utm_source=caij")
+  mutate(pinpoint = case_when(
+    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier)
   )) %>%
-  mutate(pinpoint_url = case_when(
-    !is.na(pinpoint_url) ~ paste0("<b><a href='", pinpoint_url, "'>", pinpoint_url, "</a></b>")))
+  mutate(pinpoint = case_when(
+    !is.na(pinpoint) ~ paste0("<b><a href='", pinpoint, "'>", "link", "</a></b>")))
 
 # add html to make live link to internet archive
 ati_summaries <- ati_summaries %>% 
-  mutate(ia_url = case_when(
+  mutate(internet_archive = case_when(
     internet_archive == TRUE ~ paste0('https://archive.org/', identifier)
   )) %>% 
-  mutate(ia_url = case_when(
-    !is.na(ia_url) ~ paste0("<b><a href='", ia_url, "'>", ia_url, "</a></b>")))
+  mutate(internet_archive = case_when(
+    !is.na(internet_archive) ~ paste0("<b><a href='", internet_archive, "'>", "link", "</a></b>")))
+
+ati_summaries <- ati_summaries %>% 
+  mutate(internet_archive = if_else(is.na(internet_archive), "not archived", internet_archive),
+         pinpoint = if_else(is.na(pinpoint), "not archived", pinpoint))
 
 # make org names and acronym and request_number factors
 ati_summaries <- ati_summaries %>%
@@ -92,8 +95,8 @@ ati_summaries <- ati_summaries %>%
 
 # split file in two two (fr and en)
 ati_summaries_en <- ati_summaries %>%
-  select(date, request_number, summary_en, disposition, pages, org_ac_en, org_en, pinpoint, pinpoint_url, internet_archive, ia_url)
+  select(date, request_number, summary_en, disposition, pages, org_ac_en, org_en, pinpoint, internet_archive)
 
 ati_summaries_fr <- ati_summaries %>%
-  select(date, request_number, summary_fr, disposition, pages, org_ac_fr, org_fr, pinpoint, pinpoint_url, internet_archive, ia_url
+  select(date, request_number, summary_fr, disposition, pages, org_ac_fr, org_fr, pinpoint, internet_archive
   )
