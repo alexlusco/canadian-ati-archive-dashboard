@@ -1,67 +1,12 @@
 ##########################
-# load dependencies
+# load dependencies and read prepped data
 ##########################
 
 library(shiny)
 library(shinythemes)
 library(DT)
-library(readr)
-library(dplyr)
-library(tidyr)
-library(stringr)
 
-##########################
-# read in data, clean etc.
-##########################
-
-# read in data from LC's GitHub scraper
-ati_summaries <- read_csv("https://raw.githubusercontent.com/lchski/gc-ati-summaries-data/main/ati-summaries.csv") %>% select(-umd_number)
-
-# merge year and month and convert to 'date' format
-ati_summaries_pp <- ati_summaries %>%
-  mutate(date = paste(year, month, "01", sep = "-")) %>%
-  mutate(date = lubridate::ymd(date)) %>%
-  select(-year, -month)
-
-# separate fr and en org names
-ati_summaries_pp <- ati_summaries_pp %>%
-  separate(owner_org_title, into = c("org_en", "org_fr"), sep = "\\|") %>%
-  mutate_at(vars(org_en, org_fr), str_squish)
-
-# separate fr and en org acronyms 
-ati_summaries_pp <- ati_summaries_pp %>%
-  separate(owner_org, into = c("org_ac_en", "org_ac_fr"), sep = "-") %>%
-  mutate(org_ac_fr = case_when(
-    is.na(org_ac_fr) ~ org_ac_en,
-    TRUE ~ org_ac_fr
-  )) %>%
-  mutate_at(vars(org_ac_en, org_ac_fr), str_to_upper)
-
-# relocate some vars
-ati_summaries_pp <- ati_summaries_pp %>%
-  relocate(date, .before = request_number) %>%
-  relocate(org_ac_en, .after = org_en) %>%
-  relocate(org_ac_fr, .after = org_fr)
-
-# make org names and acronym factors
-ati_summaries_pp <- ati_summaries_pp %>%
-  mutate_at(vars(org_ac_en, org_ac_fr, org_en, org_fr), as.factor)
-
-# make pages disclosed chr to kill slider filter in DT
-ati_summaries_pp <- ati_summaries_pp %>%
-  mutate(pages = as.character(pages))
-
-# add placeholder variables for PINPOINT info
-ati_summaries_pp <- ati_summaries_pp %>%
-  mutate(archived = "???",
-         url = "???")
-
-# split file in two two (fr and en)
-ati_summaries_en <- ati_summaries_pp %>%
-  select(date, request_number, summary_en, pages, org_ac_en, org_en, archived, url)
-
-ati_summaries_fr <- ati_summaries_pp %>%
-  select(date, request_number, summary_fr, pages, org_ac_fr, org_fr, archived, url)
+source('dashboard-data-prep.R')
 
 ##########################
 # ui
@@ -78,7 +23,7 @@ ui <- function(){
     
     br(),
     
-    includeHTML("https://raw.githubusercontent.com/jdunca/cdn-ati-archive-website/main/index.html"),
+    includeHTML("index.html"),
     
     br(),
     
