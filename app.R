@@ -6,7 +6,7 @@ library(shiny)
 library(shinythemes)
 library(DT)
 
-source('dashboard-data-prep.R')
+source('data-prep.R')
 
 ##########################
 # ui
@@ -16,6 +16,13 @@ ui <- function(){
   
   fluidPage(
     
+    tags$style(
+      ".tab-content {
+      margin-left: 20px;
+      margin-right: 20px;
+      }"
+      ),
+    
     theme = shinytheme("simplex"),
     
     titlePanel(title = "🇨🇦 Canadian ATI Archive", 
@@ -23,7 +30,7 @@ ui <- function(){
     
     br(),
     
-    includeHTML("index.html"),
+    includeHTML("www/index.html"),
     
     br(),
     
