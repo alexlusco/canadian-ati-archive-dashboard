@@ -75,15 +75,15 @@ ati_summaries <- ati_summaries %>%
     pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier)
   )) %>%
   mutate(pinpoint = case_when(
-    !is.na(pinpoint) ~ paste0("<b><a href='", pinpoint, "'>", "link", "</a></b>")))
+    !is.na(pinpoint) ~ paste0("<b><a href='", pinpoint, "'target='_blank'>", "link to Google Pinpoint", "</a></b>")))
 
 # add html to make live link to internet archive
 ati_summaries <- ati_summaries %>% 
   mutate(internet_archive = case_when(
-    internet_archive == TRUE ~ paste0('https://archive.org/', identifier)
+    internet_archive == TRUE ~ paste0('https://archive.org/details/', identifier)
   )) %>% 
   mutate(internet_archive = case_when(
-    !is.na(internet_archive) ~ paste0("<b><a href='", internet_archive, "'>", "link", "</a></b>")))
+    !is.na(internet_archive) ~ paste0("<b><a href='", internet_archive, "'target='_blank'>", "link to archive.org", "</a></b>")))
 
 ati_summaries <- ati_summaries %>% 
   mutate(internet_archive = if_else(is.na(internet_archive), "not archived", internet_archive),
