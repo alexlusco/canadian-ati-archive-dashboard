@@ -17,11 +17,13 @@ ui <- function(){
   fluidPage(
     
     tags$style(
-      ".tab-content {
+      ".container-fluid {
       margin-left: 20px;
       margin-right: 20px;
       }"
       ),
+    
+
     
     theme = shinytheme("simplex"),
     
@@ -52,9 +54,9 @@ ui <- function(){
         
         br(), br(),
         
-        p("Total filtered rows: "), 
+        p("Total filtered rows: ", style="font-weight: bold;"), 
         
-        verbatimTextOutput("filtered_row_en"),
+        htmlOutput("filtered_row_en"),
         
         br(),
         
@@ -78,9 +80,9 @@ ui <- function(){
         
         br(), br(),
         
-        p("Nombre de lignes :"), 
+        p("Nombre de lignes :", style="font-weight: bold;"), 
         
-        verbatimTextOutput("filtered_row_fr"),
+        htmlOutput("filtered_row_fr"),
         
         br(),
         
@@ -99,38 +101,62 @@ server <- shinyServer(
   function(input, output, session){
     
     output$dt_en <- 
-      
+        
       # make en lang table
       renderDataTable(
         
-        datatable(ati_summaries_en,
-                  autoHideNavigation = TRUE,
-                  escape = FALSE,
-                  options = list(autoWidth = FALSE, columnDefs = list(list(width = '200px', targets = "_all"))), 
-                  filter = list(position = 'top', clear = TRUE),
-                  style = "bootstrap",
-                  rownames = FALSE,
-                  class = "compact",
-                  selection = "none"
+        ati_summaries_en %>%
+        
+          datatable(autoHideNavigation = TRUE,
+                    escape = FALSE,
+                    options = list(autoWidth = TRUE,
+                                   scrollX = FALSE,
+                                   columnDefs = list(list(width = '75px', targets = c(0)), #date
+                                                     list(width = '175px', targets = c(1)), #request_number
+                                                     list(width = '200px', targets = c(2)), #summary
+                                                     list(width = '100px', targets = c(3, 6)), #disposition, org
+                                                     list(width = '50px', targets = c(4)), #pages
+                                                     list(width = '100px', targets = c(5)), #org_ac
+                                                     list(width = '75px', targets = c(7, 8)) #pinpoint, internet_archive
+                                                     
+                                   )),
+                    filter = list(position = 'top', clear = TRUE),
+                    style = "bootstrap",
+                    rownames = FALSE,
+                    class = "compact",
+                    selection = "none"
+          )
         )
-      )
     
     # make fr lang table
     output$dt_fr <- 
       
       renderDataTable(
         
-        datatable(ati_summaries_fr,
-                  autoHideNavigation = TRUE,
-                  escape = FALSE,
-                  options = list(autoWidth = FALSE, columnDefs = list(list(width = '200px', targets = "_all"))), 
-                  filter = list(position = 'top', clear = TRUE),
-                  style = "bootstrap",
-                  rownames = FALSE,
-                  class = "compact",
-                  selection = "none"
+        ati_summaries_fr %>%
+          
+
+          
+          datatable(autoHideNavigation = TRUE,
+                    escape = FALSE,
+                    options = list(autoWidth = TRUE,
+                                   scrollX = FALSE,
+                                   columnDefs = list(list(width = '75px', targets = c(0)), #date
+                                                     list(width = '175px', targets = c(1)), #request_number
+                                                     list(width = '200px', targets = c(2)), #summary
+                                                     list(width = '100px', targets = c(3, 6)), #disposition, org
+                                                     list(width = '50px', targets = c(4)), #pages
+                                                     list(width = '100px', targets = c(5)), #org_ac
+                                                     list(width = '75px', targets = c(7, 8)) #pinpoint, internet_archive
+                                                     
+                                   )),
+                    filter = list(position = 'top', clear = TRUE),
+                    style = "bootstrap",
+                    rownames = FALSE,
+                    class = "compact",
+                    selection = "none"
+          )
         )
-      )
     
     # make download all button english
     output$download_all_en <- 
