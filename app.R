@@ -23,8 +23,6 @@ ui <- function(){
       }"
       ),
     
-
-    
     theme = shinytheme("simplex"),
     
     titlePanel(title = "🇨🇦 Canadian ATI Archive", 
@@ -54,9 +52,13 @@ ui <- function(){
         
         br(), br(),
         
+        uiOutput("archived_filter"),
+        
+        br(),
+        
         p("Total filtered rows: ", style="font-weight: bold;"), 
         
-        htmlOutput("filtered_row_en"),
+        htmlOutput("filtered_row_en", style="color: red;"),
         
         br(),
         
@@ -82,7 +84,7 @@ ui <- function(){
         
         p("Nombre de lignes :", style="font-weight: bold;"), 
         
-        htmlOutput("filtered_row_fr"),
+        htmlOutput("filtered_row_fr", style="color: red;"),
         
         br(),
         
@@ -100,32 +102,70 @@ server <- shinyServer(
   
   function(input, output, session){
     
+    # show only archived button
+    output$archived_filter <- renderUI({
+      
+      checkboxInput("archived_filter",
+                    label = "Display only archived entries")
+    })
+    
+    # make en lang table
     output$dt_en <- 
-        
-      # make en lang table
+      
       renderDataTable(
-        
-        ati_summaries_en %>%
-        
-          datatable(autoHideNavigation = TRUE,
-                    escape = FALSE,
-                    options = list(autoWidth = TRUE,
-                                   scrollX = FALSE,
-                                   columnDefs = list(list(width = '75px', targets = c(0)), #date
-                                                     list(width = '175px', targets = c(1)), #request_number
-                                                     list(width = '200px', targets = c(2)), #summary
-                                                     list(width = '100px', targets = c(3, 6)), #disposition, org
-                                                     list(width = '50px', targets = c(4)), #pages
-                                                     list(width = '100px', targets = c(5)), #org_ac
-                                                     list(width = '75px', targets = c(7, 8)) #pinpoint, internet_archive
-                                                     
-                                   )),
-                    filter = list(position = 'top', clear = TRUE),
-                    style = "bootstrap",
-                    rownames = FALSE,
-                    class = "compact",
-                    selection = "none"
-          )
+      
+        if (input$archived_filter == TRUE){
+          
+          ati_summaries_en %>%
+            filter(str_detect(pinpoint, "Pinpoint")) %>%
+            mutate(order_var = str_detect(pinpoint, "Pinpoint"),
+                   order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
+              arrange(order_var) %>%
+              datatable(autoHideNavigation = TRUE,
+                        escape = FALSE,
+                        options = list(autoWidth = TRUE,
+                                       scrollX = FALSE,
+                                       columnDefs = list(list(width = '75px', targets = c(0)), #date
+                                                         list(width = '175px', targets = c(1)), #request_number
+                                                         list(width = '200px', targets = c(2)), #summary
+                                                         list(width = '100px', targets = c(3, 6)), #disposition, org
+                                                         list(width = '50px', targets = c(4)), #pages
+                                                         list(width = '100px', targets = c(5)), #org_ac
+                                                         list(width = '75px', targets = c(7, 8)), #pinpoint, internet_archive
+                                                         list(visible = FALSE, targets = c(9)) #hide order_var
+                                       )),
+                        filter = list(position = 'top', clear = TRUE),
+                        style = "bootstrap",
+                        rownames = FALSE,
+                        class = "compact",
+                        selection = "none"
+              )
+          } else {
+            
+            ati_summaries_en %>%
+              mutate(order_var = str_detect(pinpoint, "Pinpoint"),
+                     order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
+              arrange(order_var) %>%
+              datatable(autoHideNavigation = TRUE,
+                        escape = FALSE,
+                        options = list(autoWidth = TRUE,
+                                       scrollX = FALSE,
+                                       columnDefs = list(list(width = '75px', targets = c(0)), #date
+                                                         list(width = '175px', targets = c(1)), #request_number
+                                                         list(width = '200px', targets = c(2)), #summary
+                                                         list(width = '100px', targets = c(3, 6)), #disposition, org
+                                                         list(width = '50px', targets = c(4)), #pages
+                                                         list(width = '100px', targets = c(5)), #org_ac
+                                                         list(width = '75px', targets = c(7, 8)), #pinpoint, internet_archive
+                                                         list(visible = FALSE, targets = c(9)) #hide order_var
+                                       )),
+                        filter = list(position = 'top', clear = TRUE),
+                        style = "bootstrap",
+                        rownames = FALSE,
+                        class = "compact",
+                        selection = "none"
+              )
+          }
         )
     
     # make fr lang table
@@ -134,9 +174,10 @@ server <- shinyServer(
       renderDataTable(
         
         ati_summaries_fr %>%
-          
+          mutate(order_var = str_detect(pinpoint, "Pinpoint"),
+                 order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
+          arrange(order_var) %>%
 
-          
           datatable(autoHideNavigation = TRUE,
                     escape = FALSE,
                     options = list(autoWidth = TRUE,
@@ -147,8 +188,8 @@ server <- shinyServer(
                                                      list(width = '100px', targets = c(3, 6)), #disposition, org
                                                      list(width = '50px', targets = c(4)), #pages
                                                      list(width = '100px', targets = c(5)), #org_ac
-                                                     list(width = '75px', targets = c(7, 8)) #pinpoint, internet_archive
-                                                     
+                                                     list(width = '75px', targets = c(7, 8)), #pinpoint, internet_archive
+                                                     list(visible = FALSE, targets = c(9)) #hide order_var
                                    )),
                     filter = list(position = 'top', clear = TRUE),
                     style = "bootstrap",

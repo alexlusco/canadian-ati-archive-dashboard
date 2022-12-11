@@ -9,7 +9,8 @@ library(tibble)
 archived <- read_csv('misc/ia-uploaded.csv') %>% 
   mutate(agency = str_extract(identifier, ".+(?=_)")) %>% 
   select(identifier, title, agency, pinpoint, internet_archive) %>% 
-  rename(request_number = title) %>% 
+  rename(request_number = title,
+         archive = internet_archive) %>% 
   select(-pinpoint)
 
 ### read in full summary data from Lucas' github
@@ -23,7 +24,7 @@ ati_summaries.read <- read_csv("https://raw.githubusercontent.com/lchski/gc-ati-
                                     TRUE ~ request_number))
 
 #read in pinpoint files
-pinpoint <- tibble(read_delim('on_pinpoint.txt', delim = "\n", col_names = FALSE)) %>% 
+pinpoint <- tibble(read_delim('misc/on_pinpoint.txt', delim = "\n", col_names = FALSE)) %>% 
   mutate(identifier = str_remove(X1, "\\..+$"),
          pinpoint = TRUE) %>% 
   select(-X1)
@@ -35,7 +36,7 @@ ati_summaries.join <- ati_summaries.read %>%
   mutate(identifier = case_when(is.na(identifier) ~ paste(agency, request_number, sep = "_"),
                                 TRUE ~ identifier)) %>% 
   full_join(pinpoint, by = 'identifier') %>% 
-  mutate(internet_archive = if_else(is.na(internet_archive), FALSE, internet_archive),
+  mutate(archive = if_else(is.na(archive), FALSE, archive),
          pinpoint = if_else(is.na(pinpoint), FALSE, pinpoint))
 
 # merge year and month and convert to 'date' format
@@ -72,21 +73,21 @@ ati_summaries <- ati_summaries %>%
 # add html code to make live link to pinpoint
 ati_summaries <- ati_summaries %>% 
   mutate(pinpoint = case_when(
-    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier)
+    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier, "%22", "&utm_source=caij")
   )) %>%
   mutate(pinpoint = case_when(
     !is.na(pinpoint) ~ paste0("<b><a href='", pinpoint, "'target='_blank'>", "link to Google Pinpoint", "</a></b>")))
 
 # add html to make live link to internet archive
 ati_summaries <- ati_summaries %>% 
-  mutate(internet_archive = case_when(
-    internet_archive == TRUE ~ paste0('https://archive.org/details/', identifier)
+  mutate(archive = case_when(
+    archive == TRUE ~ paste0('https://archive.org/details/', identifier)
   )) %>% 
-  mutate(internet_archive = case_when(
-    !is.na(internet_archive) ~ paste0("<b><a href='", internet_archive, "'target='_blank'>", "link to archive.org", "</a></b>")))
+  mutate(archive = case_when(
+    !is.na(archive) ~ paste0("<b><a href='", archive, "'target='_blank'>", "link to archive.org", "</a></b>")))
 
 ati_summaries <- ati_summaries %>% 
-  mutate(internet_archive = if_else(is.na(internet_archive), "not archived", internet_archive),
+  mutate(archive = if_else(is.na(archive), "not archived", archive),
          pinpoint = if_else(is.na(pinpoint), "not archived", pinpoint))
 
 # make org names and acronym and request_number factors
@@ -95,8 +96,8 @@ ati_summaries <- ati_summaries %>%
 
 # split file in two two (fr and en)
 ati_summaries_en <- ati_summaries %>%
-  select(date, request_number, summary_en, disposition, pages, org_ac_en, org_en, pinpoint, internet_archive)
+  select(date, request_number, summary_en, disposition, pages, org_ac_en, org_en, pinpoint, archive)
 
 ati_summaries_fr <- ati_summaries %>%
-  select(date, request_number, summary_fr, disposition, pages, org_ac_fr, org_fr, pinpoint, internet_archive
+  select(date, request_number, summary_fr, disposition, pages, org_ac_fr, org_fr, pinpoint, archive
   )
