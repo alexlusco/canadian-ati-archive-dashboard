@@ -52,13 +52,13 @@ ui <- function(){
         
         br(), br(),
         
-        uiOutput("archived_filter"),
+        uiOutput("archived_filter_en"),
         
         br(),
         
         p("Total filtered rows: ", style="font-weight: bold;"), 
         
-        htmlOutput("filtered_row_en", style="color: red;"),
+        htmlOutput("filtered_row_en", style="color: #D9230F;"),
         
         br(),
         
@@ -82,9 +82,13 @@ ui <- function(){
         
         br(), br(),
         
+        uiOutput("archived_filter_fr"),
+        
+        br(),
+        
         p("Nombre de lignes :", style="font-weight: bold;"), 
         
-        htmlOutput("filtered_row_fr", style="color: red;"),
+        htmlOutput("filtered_row_fr", style="color: #D9230F;"),
         
         br(),
         
@@ -102,22 +106,26 @@ server <- shinyServer(
   
   function(input, output, session){
     
-    # show only archived button
-    output$archived_filter <- renderUI({
+    # show only archived button english
+    output$archived_filter_en <- renderUI({
       
-      checkboxInput("archived_filter",
+      checkboxInput("archived_filter_en",
                     label = "Display only archived entries")
+    })
+    
+    # show only archived button french
+    output$archived_filter_fr <- renderUI({
+      
+      checkboxInput("archived_filter_fr",
+              label = "Résultats archivés uniquement")
     })
     
     # make en lang table
     output$dt_en <- 
       
       renderDataTable(
-      
-        if (input$archived_filter == TRUE){
-          
           ati_summaries_en %>%
-            filter(str_detect(pinpoint, "Pinpoint")) %>%
+            filter(if (input$archived_filter_en == TRUE) str_detect(pinpoint, "Pinpoint") else TRUE) %>%
             mutate(order_var = str_detect(pinpoint, "Pinpoint"),
                    order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
               arrange(order_var) %>%
@@ -140,32 +148,6 @@ server <- shinyServer(
                         class = "compact",
                         selection = "none"
               )
-          } else {
-            
-            ati_summaries_en %>%
-              mutate(order_var = str_detect(pinpoint, "Pinpoint"),
-                     order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
-              arrange(order_var) %>%
-              datatable(autoHideNavigation = TRUE,
-                        escape = FALSE,
-                        options = list(autoWidth = TRUE,
-                                       scrollX = FALSE,
-                                       columnDefs = list(list(width = '75px', targets = c(0)), #date
-                                                         list(width = '175px', targets = c(1)), #request_number
-                                                         list(width = '200px', targets = c(2)), #summary
-                                                         list(width = '100px', targets = c(3, 6)), #disposition, org
-                                                         list(width = '50px', targets = c(4)), #pages
-                                                         list(width = '100px', targets = c(5)), #org_ac
-                                                         list(width = '75px', targets = c(7, 8)), #pinpoint, internet_archive
-                                                         list(visible = FALSE, targets = c(9)) #hide order_var
-                                       )),
-                        filter = list(position = 'top', clear = TRUE),
-                        style = "bootstrap",
-                        rownames = FALSE,
-                        class = "compact",
-                        selection = "none"
-              )
-          }
         )
     
     # make fr lang table
@@ -174,6 +156,7 @@ server <- shinyServer(
       renderDataTable(
         
         ati_summaries_fr %>%
+          filter(if (input$archived_filter_fr == TRUE) str_detect(pinpoint, "Pinpoint") else TRUE) %>%
           mutate(order_var = str_detect(pinpoint, "Pinpoint"),
                  order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
           arrange(order_var) %>%
@@ -270,5 +253,7 @@ server <- shinyServer(
         cat(length(input[["dt_fr_rows_all"]]))})
     
   })
+
+
 
 shinyApp(ui, server)
