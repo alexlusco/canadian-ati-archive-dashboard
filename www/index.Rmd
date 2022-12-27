@@ -7,17 +7,15 @@ output:
 
 ### Accessing government information can be tricky. We want to make it easier.
 
-<font size = 4> Journalists, academics, lawyers, and members of the public file tens of thousands of requests for information from the Canadian Government every year. But previously filed Access to Information (ATI) requests aren't made public by default. That's why we are working to develop the Canadian ATI Archive.
+<font size = 4> Journalists, academics, lawyers, and members of the public file tens of thousands of requests for information from the Canadian Government every year. But previously filed Access to Information (ATI) requests aren't made public by default. Demand for government information in Canada far exceeds what is accessible.
 
-Currently, you can find summaries of previously completed requests on Canada's [Open Government website](https://open.canada.ca/en/search/ati). If you find one you want, you can fill out a web form requesting access. If you want more than one, you have to complete the form multiple times. Usually, information is released as a PDF image that doesn't support text searching or copy and paste functions.
+That's why we built the Canadian ATI Archive. Civic technologists have an important role to play in envisioning ways to improve how governments engage with residents. 
 
-We published over one thousand previously filed ATI requests that go back as far as 2014 through Pinpoint, a Google tool that uses artificial intelligence to identify text in the PDF files and help investigators quickly search through huge amounts of content.
+This dashboard allows you to easily search for previously completed ATI requests from the Canadian Federal Government and locate documents currently included in the Canadian ATI Archive. It was created by [Jamie Duncan](jamieduncan.me) & [Alex Luscombe](alexluscombe.ca) using [Lucas Cherkewsky's](https://github.com/lchski/gc-ati-summaries-data)) mirror of Federal ATI summaries. Files are stored on the Internet Archive and can be explored using Google's Pinpoint tool for investigative journalists.
 
-Right now our [collection](https://journaliststudio.google.com/pinpoint/collections&utm_source=caij) features files from Infrastructure Canada, the Department of Fisheries and Oceans, the Department of Justice, the Canada Border Services Agency, and the Canada Security Intelligence Service. We will continue expanding the number of documents available in the coming months.
+Spot an error? Have a suggestion? Files to contribute? Just want to chat? Get in touch with us!
 
-It's often helpful to see the wording of the original request. Unfortunately, completed summaries are often only kept in the public dataset for two years. Our mirror of the public dataset (developed by [Lucas Cherkewsky](https://github.com/lchski/gc-ati-summaries-data)) updates weekly and features summaries going back to 2017.
 
-This dashboard allows you to easily search for previously completed requests and find documents currently included in the Canadian ATI Archive.
 
 
 
