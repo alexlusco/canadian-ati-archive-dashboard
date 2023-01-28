@@ -1,0 +1,13 @@
+name: dashboard
+title: dashboard
+username:
+account: cdn-ati-archive
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7976124
+bundleId: 6698330
+url: https://cdn-ati-archive.shinyapps.io/dashboard/
+when: 1672864685.76087
+lastSyncTime: 1672864685.76096
+asMultiple: FALSE
+asStatic: FALSE

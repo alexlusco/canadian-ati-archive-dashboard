@@ -32,6 +32,8 @@ ui <- function(){
     
     includeHTML("www/index.html"),
     
+    p(paste0("Last updated: ", format(Sys.Date(), "%B %d, %Y"))),
+    
     br(),
     
     tabsetPanel(

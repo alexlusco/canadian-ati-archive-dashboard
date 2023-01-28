@@ -11,9 +11,9 @@ output:
 
 That's why we built the Canadian ATI Archive. Civic technologists have an important role to play in envisioning ways to improve how governments engage with residents. 
 
-This dashboard allows you to easily search for previously completed ATI requests from the Canadian Federal Government and locate documents currently included in the Canadian ATI Archive. It was created by [Jamie Duncan](jamieduncan.me) & [Alex Luscombe](alexluscombe.ca) using [Lucas Cherkewsky's](https://github.com/lchski/gc-ati-summaries-data)) mirror of Federal ATI summaries. Files are stored on the Internet Archive and can be explored using Google's Pinpoint tool for investigative journalists.
+This dashboard, sponsored by the [Centre for Access to Information and Justice](https://www.uwinnipeg.ca/caij/), allows you to easily search for previously completed ATI requests from the Canadian Federal Government and locate documents currently included in the Canadian ATI Archive. It was created by [Jamie Duncan](jamieduncan.me), [Alex Luscombe](alexluscombe.ca), and [Lucas Cherkewsky](https://github.com/lchski/gc-ati-summaries-data) with support from [Kevin Walby](https://www.uwinnipeg.ca/criminal-justice/faculty-staff/kevin-walby.html) and [Sean Boots](https://sboots.ca/). Files are stored on the Internet Archive and can be explored using Google's Pinpoint tool for investigative journalists.
 
-Spot an error? Have a suggestion? Files to contribute? Just want to chat? Get in touch with us!
+Spot an error? Have a suggestion? Files to contribute? Just want to chat? [Get in touch](mailto:caij.winnipeg@gmail.com) with us!
 
 
 
