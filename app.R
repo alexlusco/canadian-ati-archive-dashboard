@@ -127,7 +127,7 @@ server <- shinyServer(
       
       renderDataTable(
           ati_summaries_en %>%
-            filter(if (input$archived_filter_en == TRUE) str_detect(pinpoint, "Pinpoint") else TRUE) %>%
+            filter(if (input$archived_filter_en == TRUE) str_detect(pinpoint, "Pinpoint")|str_detect(archive, "archive.org") else TRUE) %>%
             mutate(order_var = str_detect(pinpoint, "Pinpoint"),
                    order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
               arrange(order_var) %>%
@@ -158,7 +158,7 @@ server <- shinyServer(
       renderDataTable(
         
         ati_summaries_fr %>%
-          filter(if (input$archived_filter_fr == TRUE) str_detect(pinpoint, "Pinpoint") else TRUE) %>%
+          filter(if (input$archived_filter_fr == TRUE) str_detect(pinpoint, "Pinpoint")|str_detect(archive, "archive.org") else TRUE) %>%
           mutate(order_var = str_detect(pinpoint, "Pinpoint"),
                  order_var = factor(order_var, levels = c("TRUE", "FALSE"))) %>%
           arrange(order_var) %>%
