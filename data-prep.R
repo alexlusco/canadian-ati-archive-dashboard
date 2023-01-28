@@ -73,7 +73,7 @@ ati_summaries <- ati_summaries %>%
 # add html code to make live link to pinpoint
 ati_summaries <- ati_summaries %>% 
   mutate(pinpoint = case_when(
-    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", identifier, "%22", "&utm_source=caij")
+    pinpoint == TRUE ~ paste0("https://journaliststudio.google.com/pinpoint/search?collection=ce02e69445f4c620&q=%22", str_extract(identifier, "\\w{1,4}_\\w{1,4}-\\d{4}-\\d{2,5}"), "%22", "&utm_source=caij")
   )) %>%
   mutate(pinpoint = case_when(
     !is.na(pinpoint) ~ paste0("<b><a href='", pinpoint, "'target='_blank'>", "link to Google Pinpoint", "</a></b>")))
@@ -88,7 +88,7 @@ ati_summaries <- ati_summaries %>%
 
 ati_summaries <- ati_summaries %>% 
   mutate(archive = if_else(is.na(archive), "not archived", archive),
-         pinpoint = if_else(is.na(pinpoint), "not archived", pinpoint))
+         pinpoint = if_else(is.na(pinpoint), "not on pinpoint", pinpoint))
 
 # make org names and acronym and request_number factors
 ati_summaries <- ati_summaries %>%
